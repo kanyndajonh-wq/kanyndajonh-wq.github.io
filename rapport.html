@@ -5,78 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rapport Marcher-Direct</title>
 <style>
-  body { font-family: Arial; background: #f4f4f4; padding: 20px; }
-  .container { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; }
-  h2 { color: #2e7d32; text-align: center; }
-  label { font-weight: bold; margin-top: 10px; display: block; }
-  input, textarea, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
-  button { background: #2e7d32; color: white; border: none; font-size: 16px; margin-top: 15px; cursor: pointer; }
-  button:hover { background: #1b5e20; }
-  .resultat { margin-top: 15px; padding: 10px; background: #e8f5e9; border-radius: 5px; font-weight: bold; text-align: center; }
+body{font-family:Arial;background:#f4f4f4;margin:0;padding:20px;}
+.container{background:white;padding:20px;border-radius:8px;max-width:500px;margin:auto;}
+h2{color:#2e7d32;text-align:center;}
+label{font-weight:bold;margin-top:10px;display:block;}
+input,textarea,button{width:100%;padding:10px;margin-top:5px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;}
+button{background:#2e7d32;color:white;border:none;cursor:pointer;margin-top:15px;}
+button:hover{background:#1b5e20;}
+.result{margin-top:15px;padding:10px;background:#e8f5e9;border-radius:4px;}
 </style>
 </head>
 <body>
 <div class="container">
-  <h2>📊 Rapport du Jour - Marcher-Direct</h2>
+<h2>📊 Rapport du Jour - Marcher-Direct</h2>
 
-  <label>Nom du Vendeur</label>
-  <input type="text" id="vendeur" placeholder="Ex: Papa John">
+<label>Nom du vendeur</label>
+<input type="text" id="vendeur" placeholder="Ex: John">
 
-  <label>Nom du Produit</label>
-  <input type="text" id="produit" placeholder="Ex: Sacs de ciment">
+<label>Ventes du jour (FC)</label>
+<input type="number" id="ventes" placeholder="Ex: 150000">
 
-  <label>Stock Initial</label>
-  <input type="number" id="stockInitial" placeholder="Ex: 50">
+<label>Commentaires</label>
+<textarea id="commentaires" rows="3"></textarea>
 
-  <label>Vendu Aujourd'hui</label>
-  <input type="number" id="vendu" placeholder="Ex: 12" oninput="calculer()">
-
-  <div class="resultat" id="restant">Stock Restant: 0</div>
-
-  <label>Chiffre d'Affaires FC</label>
-  <input type="number" id="ventes" placeholder="Ex: 120000">
-
-  <label>Dépenses du Jour FC</label>
-  <input type="number" id="depenses" placeholder="Ex: 20000" oninput="calculer()">
-
-  <div class="resultat" id="benefice">Bénéfice: 0 FC</div>
-
-  <label>Commentaires</label>
-  <textarea id="commentaires" rows="3" placeholder="Ex: Bonne journée, stock va finir"></textarea>
-
-  <button onclick="envoyer()">Envoyer le Rapport</button>
+<button onclick="envoyer()">Envoyer sur WhatsApp</button>
+<div class="result" id="result"></div>
 </div>
 
 <script>
-function calculer() {
-  let initial = parseFloat(document.getElementById('stockInitial').value) || 0;
-  let vendu = parseFloat(document.getElementById('vendu').value) || 0;
-  let ventes = parseFloat(document.getElementById('ventes').value) || 0;
-  let depenses = parseFloat(document.getElementById('depenses').value) || 0;
-
-  let restant = initial - vendu;
-  let benefice = ventes - depenses;
-
-  document.getElementById('restant').innerText = "Stock Restant: " + restant;
-  document.getElementById('benefice').innerText = "Bénéfice: " + benefice + " FC";
-}
-
-function envoyer() {
-  let data = {
-    vendeur: document.getElementById('vendeur').value,
-    produit: document.getElementById('produit').value,
-    stockInitial: document.getElementById('stockInitial').value,
-    vendu: document.getElementById('vendu').value,
-    ventes: document.getElementById('ventes').value,
-    depenses: document.getElementById('depenses').value,
-    commentaires: document.getElementById('commentaires').value,
-    date: new Date().toLocaleDateString('fr-CD')
-  };
-  
-  // POUR L'INSTANT ça affiche juste. Prochaine étape: envoyer vers Google Sheet
-  alert("Rapport de " + data.vendeur + " enregistré !\nStock Restant: " + (data.stockInitial - data.vendu));
-  console.log(data);
+function envoyer(){
+  let v = document.getElementById('vendeur').value;
+  let ve = document.getElementById('ventes').value;
+  let c = document.getElementById('commentaires').value;
+  let message = `*Rapport Marcher-Direct*%0A%0A*Vendeur:* ${v}%0A*Ventes:* ${ve} FC%0A*Commentaires:* ${c}`;
+  let url = `https://wa.me/243853272232?text=${message}`;
+  document.getElementById('result').innerHTML = `<a href="${url}" target="_blank">Clique ici pour envoyer sur WhatsApp</a>`;
 }
 </script>
-</body>
-</html>
+</body>XXXXXXX
