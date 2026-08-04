@@ -1,82 +1,88 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marcher-Direct</title>
-<style>
-body{font-family:Arial;background:#25D366;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}
-.box{background:white;padding:30px;border-radius:15px;width:90%;max-width:400px;text-align:center}
-h1{color:#25D366;margin-bottom:20px}
-input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:8px}
-button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer}
-.btn1{background:#25D366;color:white}
-.btn2{background:white;color:#25D366;border:2px solid #25D366}
-.btn3{background:transparent;color:#555;border:none;font-size:14px;text-decoration:underline}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcher-Direct</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 25px;
+      font-size: 24px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    .btn1, .btn2, .btn3 {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn1 { background: #667eea; color: white; }
+    .btn2 { background: #764ba2; color: white; }
+    .btn3 { background: #f0f0f0; color: #333; }
+  </style>
 </head>
 <body>
+
 <div class="box">
-<h1>Bienvenue chez<br>Marcher-Direct</h1>
+  <h1>Bienvenue chez<br>Marcher-Direct</h1>
 
-<input type="email" placeholder="Votre Email">
-<div style="position: relative;">
-  <input type="password" id="passwordField" placeholder="Mot de passe" style="width: 100%; padding-right: 45px;">
-<span id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 22px;">🙈</span>
-<button class="btn1">S'INSCRIRE</button>
-<button class="btn2">SE CONNECTER</button>
-<button class="btn3">J'ai déjà un compte</button> 
-</div>                                                     
-  <script type="module">
-  // 1. IMPORT
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+  <input type="email" placeholder="Votre Email">
 
-  // 2. TES CLÉS FIREBASE
-  const firebaseConfig = {
-    apiKey: "AIzaSyAaRU14FsObqLARlLRqKaGguxwij1UwfTI",
-    authDomain: "marcher-direct.firebaseapp.com",
-    projectId: "marcher-direct",
-    storageBucket: "marcher-direct.firebasestorage.app",
-    messagingSenderId: "248195902685",
-    appId: "1:248195902685:web:fe8a4b9103fad3200c7f34"
-  };
+  <div style="position: relative;">
+    <input type="password" id="passwordField" placeholder="Mot de passe" style="width: 100%; padding-right: 45px;">
+    <span id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 22px;">🙈</span>
+  </div>
 
-  // 3. INITIALISER
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  <button class="btn1">S'INSCRIRE</button>
+  <button class="btn2">SE CONNECTER</button>
+  <button class="btn3">J'ai déjà un compte</button> 
+</div>
 
-  // 4. CONNECTER AU BOUTON S'INSCRIRE
-  const bouton = document.querySelector("button"); // Adapte si ton bouton a un id
-  const emailInput = document.querySelector("input[type='email']");
-  const passwordInput = document.querySelector("input[type='password']");
-
-  bouton.addEventListener("click", () => {
-    const email = emailInput.value;
-    const password = passwordInput.value;
-
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        alert("Inscription réussie ! Bienvenue " + email);
-      })
-      .catch((error) => {
-        alert("Erreur: " + error.message);
-      });
+<script>
 // BOUTON POUR AFFICHER/CACHER LE MOT DE PASSE
 const togglePassword = document.getElementById('togglePassword');
 const passwordInput = document.getElementById('passwordField');
 
 togglePassword.addEventListener('click', function () {
-  // Si c'est caché on montre
   if (passwordInput.type === 'password') {
     passwordInput.type = 'text';
     this.textContent = '🐵'; // Singe qui regarde
-  } 
-  // Si c'est visible on cache
-  else {
+  } else {
     passwordInput.type = 'password';
-    this.textContent = '🙈'; // Singe qui cache les yeux
+    this.textContent = '🙈'; // Singe qui cache
   }
-});  
-    </body>
+});
+</script>
+</body>
 </html>
