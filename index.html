@@ -24,8 +24,44 @@ button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;font-w
 
 <button class="btn1">S'INSCRIRE</button>
 <button class="btn2">SE CONNECTER</button>
-<button class="btn3">J'ai déjà un compte</button>
+<button class="btn3">J'ai déjà un compte</button> 
+</div>                                                     
+  <script type="module">
+  // 1. IMPORT
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
-</div>
+  // 2. TES CLÉS FIREBASE
+  const firebaseConfig = {
+    apiKey: "AIzaSyAaRU14FsObqLARlLRqKaGguxwij1UwfTI",
+    authDomain: "marcher-direct.firebaseapp.com",
+    projectId: "marcher-direct",
+    storageBucket: "marcher-direct.firebasestorage.app",
+    messagingSenderId: "248195902685",
+    appId: "1:248195902685:web:fe8a4b9103fad3200c7f34"
+  };
+
+  // 3. INITIALISER
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // 4. CONNECTER AU BOUTON S'INSCRIRE
+  const bouton = document.querySelector("button"); // Adapte si ton bouton a un id
+  const emailInput = document.querySelector("input[type='email']");
+  const passwordInput = document.querySelector("input[type='password']");
+
+  bouton.addEventListener("click", () => {
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        alert("Inscription réussie ! Bienvenue " + email);
+      })
+      .catch((error) => {
+        alert("Erreur: " + error.message);
+      });
+  });
+</script>
 </body>
 </html>
