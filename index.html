@@ -21,10 +21,9 @@ button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;font-w
 
 <input type="email" placeholder="Votre Email">
 <div style="position: relative;">
-  <input type="password" placeholder="Mot de passe">
-  <span id="togglePassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👁️</span>
+<input type="password" id="passwordField" placeholder="Mot de passe" style="width: 100%; padding-right: 40px;">
+<span id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 20px;">🙈</span>
 </div>
-
 <button class="btn1">S'INSCRIRE</button>
 <button class="btn2">SE CONNECTER</button>
 <button class="btn3">J'ai déjà un compte</button> 
@@ -64,16 +63,22 @@ button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;font-w
       .catch((error) => {
         alert("Erreur: " + error.message);
       });
-  });
-// 5. BOUTON OEIL POUR AFFICHER LE MOT DE PASSE
-const togglePassword = document.querySelector('#togglePassword');
-const passwordInput = document.querySelector("input[type='password']");
+  // 5. BOUTON PAUPIERES POUR AFFICHER LE MOT DE PASSE
+const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('passwordField');
 
 togglePassword.addEventListener('click', function () {
-  const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-  passwordInput.setAttribute('type', type);
-  this.textContent = type === 'password' ? '👁️' : '🙈';
+  // Si c'est caché, on montre
+  if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+    this.textContent = '👁️'; // Oeil ouvert
+  } 
+  // Si c'est visible, on cache
+  else {
+    passwordInput.type = 'password';
+    this.textContent = '🙈'; // Paupières fermées
+  }
 });
-  </script>
+// 5.
 </body>
 </html>
