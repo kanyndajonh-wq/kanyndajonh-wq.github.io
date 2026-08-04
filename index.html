@@ -65,6 +65,15 @@ button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;font-w
         alert("Erreur: " + error.message);
       });
   });
-</script>
+// 5. BOUTON OEIL POUR AFFICHER LE MOT DE PASSE
+const togglePassword = document.querySelector('#togglePassword');
+const passwordInput = document.querySelector("input[type='password']");
+
+togglePassword.addEventListener('click', function () {
+  const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+  passwordInput.setAttribute('type', type);
+  this.textContent = type === 'password' ? '👁️' : '🙈';
+});
+  </script>
 </body>
 </html>
