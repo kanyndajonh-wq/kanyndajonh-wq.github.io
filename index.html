@@ -6,10 +6,10 @@
 <title>Marcher-Direct</title>
 <style>
 body{font-family:Arial;background:#25D366;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}
-.box{background:white;padding:30px;border-radius:15px;width:90%;max-width:400px;box-shadow:0 4px 10px rgba(0,0,0,0.2);text-align:center}
-h1{color:#25D366;font-size:24px}
-input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
-button{width:100%;padding:12px;margin:10px 0;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer}
+.box{background:white;padding:30px;border-radius:15px;width:90%;max-width:400px;text-align:center}
+h1{color:#25D366}
+input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:8px}
+button{width:100%;padding:12px;margin:10px 0;border:none;border-radius:8px;font-weight:bold;font-size:16px}
 .btn1{background:#25D366;color:white}
 .btn2{background:white;color:#25D366;border:2px solid #25D366}
 </style>
@@ -20,52 +20,7 @@ button{width:100%;padding:12px;margin:10px 0;border:none;border-radius:8px;font-
 <input type="email" placeholder="Votre Email">
 <input type="password" placeholder="Mot de passe">
 <button class="btn1">SE CONNECTER</button>
-<button class="btn2">S'INSCRIR</button>
+<button class="btn2">S'INSCRIRE</button>
 </div>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rapport Marcher-Direct</title>
-<style>
-body{font-family:Arial;background:#f4f4f4;margin:0;padding:20px;}
-.container{background:white;padding:20px;border-radius:8px;max-width:500px;margin:auto;}
-h2{color:#2e7d32;text-align:center;}
-label{font-weight:bold;margin-top:10px;display:block;}
-input,textarea,button{width:100%;padding:10px;margin-top:5px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;}
-button{background:#2e7d32;color:white;border:none;cursor:pointer;margin-top:15px;}
-button:hover{background:#1b5e20;}
-.result{margin-top:15px;padding:10px;background:#e8f5e9;border-radius:4px;}
-</style>
-</head>
-<body>
-<div class="container">
-<h2>📊 Rapport du Jour - Marcher-Direct</h2>
-
-<label>Nom du vendeur</label>
-<input type="text" id="vendeur" placeholder="Ex: John">
-
-<label>Ventes du jour (FC)</label>
-<input type="number" id="ventes" placeholder="Ex: 150000">
-
-<label>Commentaires</label>
-<textarea id="commentaires" rows="3"></textarea>
-
-<button onclick="envoyer()">Envoyer sur WhatsApp</button>
-<div class="result" id="result"></div>
-</div>
-
-<script>
-function envoyer(){
-  let v = document.getElementById('vendeur').value;
-  let ve = document.getElementById('ventes').value;
-  let c = document.getElementById('commentaires').value;
-  let message = `*Rapport Marcher-Direct*%0A%0A*Vendeur:* ${v}%0A*Ventes:* ${ve} FC%0A*Commentaires:* ${c}`;
-  let url = `https://wa.me/243853272232?text=${message}`;
-  document.getElementById('result').innerHTML = `<a href="${url}" target="_blank">Clique ici pour envoyer sur WhatsApp</a>`;
-}
-</script>
-</body>XXXXXXX
