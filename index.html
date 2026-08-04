@@ -63,18 +63,21 @@ button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;font-w
       .catch((error) => {
         alert("Erreur: " + error.message);
       });
-  // AFFICHER LE MOT DE PASSE
+// BOUTON POUR AFFICHER/CACHER LE MOT DE PASSE
 const togglePassword = document.getElementById('togglePassword');
 const passwordInput = document.getElementById('passwordField');
 
 togglePassword.addEventListener('click', function () {
+  // Si c'est caché on montre
   if (passwordInput.type === 'password') {
     passwordInput.type = 'text';
-    this.textContent = '👁️'; // Oeil ouvert avec pupille
-  } else {
+    this.textContent = '🐵'; // Singe qui regarde
+  } 
+  // Si c'est visible on cache
+  else {
     passwordInput.type = 'password';
-    this.textContent = '👁️‍🗨️'; // Oeil fermé avec cils
+    this.textContent = '🙈'; // Singe qui cache les yeux
   }
-});
-</body>
+});  
+    </body>
 </html>
