@@ -10,7 +10,9 @@
     .card{background:white;padding:30px 20px;border-radius:20px;max-width:400px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.2);}
     .logo{width:120px;height:120px;border-radius:20px;margin:0 auto 20px auto;object-fit:cover;}
     h2{color:#333;margin-bottom:25px;font-size:22px;}
-    input{width:100%;padding:14px;margin:10px 0;border-radius:10px;border:1px solid #ddd;font-size:16px;}
+    .input-group{position:relative;width:100%;}
+    input{width:100%;padding:14px;margin:10px 0;border-radius:10px;border:1px solid #ddd;font-size:16px;padding-right:45px;}
+    .toggle-pass{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:22px;user-select:none;}
     button{width:100%;padding:14px;margin:10px 0;border-radius:10px;border:none;background:#4A90E2;color:white;font-size:16px;font-weight:bold;cursor:pointer;}
     button.signup{background:#8E44AD;}
     button.gray{background:#eee;color:#333;}
@@ -21,15 +23,34 @@
     <img src="https://i.ibb.co/twvWjwkF/logo.png" alt="Marcher-Direct Logo" class="logo">
     <h2>Bienvenue chez Marcher-Direct</h2>
     <input type="email" id="email" placeholder="Votre Email" required>
-    <input type="password" id="pass" placeholder="Mot de passe" required>
+    
+    <div class="input-group">
+      <input type="password" id="pass" placeholder="Mot de passe" required>
+      <span class="toggle-pass" id="oeil" onclick="voirMdp()">🙈</span>
+    </div>
+
     <button onclick="sInscrire()" class="signup">S'INSCRIRE</button>
     <button onclick="seConnecter()">SE CONNECTER</button>
     <button onclick="seConnecter()" class="gray">J'ai déjà un compte</button>
   </div>
 
 <script>
+let mdpVisible = false;
+function voirMdp(){
+  let x = document.getElementById("pass");
+  let oeil = document.getElementById("oeil");
+  if (mdpVisible === false) {
+    x.type = "text"; // MONTRER
+    oeil.innerHTML = "👁️"; // change l'icône
+    mdpVisible = true;
+  } else {
+    x.type = "password"; // CACHER
+    oeil.innerHTML = "🙈"; // change l'icône
+    mdpVisible = false;
+  }
+}
+
 function allerDansApp(){
-  // CE LIEN OUVRE VRAIMENT L'APP
   window.location.href = "app.html"; 
 }
 
