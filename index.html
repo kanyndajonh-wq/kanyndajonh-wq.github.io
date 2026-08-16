@@ -2,113 +2,51 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Marcher-Direct</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .box {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-    }
-    h1 {
-      color: #333;
-      margin-bottom: 25px;
-      font-size: 24px;
-    }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      box-sizing: border-box;
-      font-size: 16px;
-    }
-    .btn1, .btn2, .btn3 {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .btn1 { background: #667eea; color: white; }
-    .btn2 { background: #764ba2; color: white; }
-    .btn3 { background: #f0f0f0; color: #333; }
+    *{box-sizing:border-box}
+    body{text-align:center;font-family:Arial;background:linear-gradient(135deg, #4A90E2, #8E44AD);padding:20px;margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+    .card{background:white;padding:30px 20px;border-radius:20px;max-width:400px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.2);}
+    .logo{width:120px;height:120px;border-radius:20px;margin:0 auto 20px auto;object-fit:cover;}
+    h2{color:#333;margin-bottom:25px;font-size:22px;}
+    input{width:100%;padding:14px;margin:10px 0;border-radius:10px;border:1px solid #ddd;font-size:16px;}
+    button{width:100%;padding:14px;margin:10px 0;border-radius:10px;border:none;background:#4A90E2;color:white;font-size:16px;font-weight:bold;cursor:pointer;}
+    button.signup{background:#8E44AD;}
+    button.gray{background:#eee;color:#333;}
   </style>
 </head>
 <body>
-
-<div class="box">
-  <div style="text-align: center; margin-bottom: 20px;">
-      <img src="logo.png.jpg" alt="Marcher-Direct Logo" style="width: 120px; height: 120px; border-radius: 20px;">
-</div>
-  <h1>Bienvenue chez<br>Marcher-Direct</h1>
-
-  <input type="email" placeholder="Votre Email">
-
-  <div style="position: relative;">
-    <input type="password" id="passwordField" placeholder="Mot de passe" style="width: 100%; padding-right: 45px;">
-    <span id="togglePassword" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 22px;">🙈</span>
+  <div class="card">
+    <img src="https://i.ibb.co/twvWjwkF/logo.png" alt="Marcher-Direct Logo" class="logo">
+    <h2>Bienvenue chez Marcher-Direct</h2>
+    <input type="email" id="email" placeholder="Votre Email" required>
+    <input type="password" id="pass" placeholder="Mot de passe" required>
+    <button onclick="sInscrire()" class="signup">S'INSCRIRE</button>
+    <button onclick="seConnecter()">SE CONNECTER</button>
+    <button onclick="seConnecter()" class="gray">J'ai déjà un compte</button>
   </div>
 
-  <button class="btn1">S'INSCRIRE</button>
-  <button class="btn2">SE CONNECTER</button>
-  <button class="btn3">J'ai déjà un compte</button> 
-</div>
-
 <script>
-// BOUTON POUR AFFICHER/CACHER LE MOT DE PASSE
-const togglePassword = document.getElementById('togglePassword');
-const passwordInput = document.getElementById('passwordField');
+function allerDansApp(){
+  // CE LIEN OUVRE VRAIMENT L'APP
+  window.location.href = "app.html"; 
+}
 
-togglePassword.addEventListener('click', function () {
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    this.textContent = '🐵'; // Singe qui regarde
+function seConnecter(){
+  let email = document.getElementById('email').value;
+  let pass = document.getElementById('pass').value;
+  if(email !== "" && pass !== ""){
+    allerDansApp(); 
   } else {
-    passwordInput.type = 'password';
-    this.textContent = '🙈'; // Singe qui cache
+    alert("Veuillez remplir Email et Mot de passe");
   }
-});
-// ACTION DES BOUTONS
-document.querySelector('.btn1').addEventListener('click', function() {
-    alert('Inscription bientôt disponible !');
-});
+}
 
-document.querySelector('.btn2').addEventListener('click', function() {
-    alert('Connexion bientôt disponible !');
-});
-
-document.querySelector('.btn3').addEventListener('click', function() {
-    alert('Récupération de mot de passe bientôt !');
-});  
-</script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-<script>
-  // TA CONFIG FIREBASE
-  var firebaseConfig = {
-    databaseURL: "https://marcher-direct-default-rtdb.firebaseio.com/"
-  };
-  firebase.initializeApp(firebaseConfig);
-  var db = firebase.database();
+function sInscrire(){
+  alert("Inscription réussie !");
+  allerDansApp(); 
+}
 </script>
 </body>
 </html>
