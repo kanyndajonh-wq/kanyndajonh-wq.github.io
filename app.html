@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Marcher-Direct - App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body{font-family:Arial;background:#f5f5f5;margin:0;padding:0;}
+  .header{background:linear-gradient(135deg, #4A90E2, #8E44AD);color:white;padding:15px;text-align:center;font-size:20px;font-weight:bold;position:sticky;top:0;}
+  .container{padding:15px;}
+  .btn{background:#4A90E2;color:white;border:none;padding:14px;border-radius:10px;width:100%;margin:10px 0;font-size:16px;font-weight:bold;cursor:pointer;}
+  .btn.green{background:#27AE60;}
+  .btn.whatsapp{background:#25D366;}
+  .product{background:white;padding:15px;border-radius:10px;margin:10px 0;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+  .product img{width:100%;border-radius:8px;margin-bottom:10px;}
+  input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ccc;font-size:15px;}
+  #formProduit{display:none;background:white;padding:15px;border-radius:10px;margin:10px 0;}
+</style>
+</head>
+<body>
+  <div class="header">Marcher-Direct</div>
+  
+  <div class="container">
+    <button class="btn" onclick="ajouterProduit()">+ AJOUTER UN PRODUIT</button>
+    <button class="btn green" onclick="voirPanier()">🛒 VOIR PANIER (0)</button>
+
+    <div id="formProduit">
+      <h3>Nouveau Produit</h3>
+      <input type="text" id="nom" placeholder="Nom du produit">
+      <input type="number" id="prix" placeholder="Prix en FC">
+      <textarea id="desc" placeholder="Description"></textarea>
+      <input type="file" id="photo" accept="image/*">
+      <button class="btn" onclick="publierProduit()">PUBLIER</button>
+    </div>
+
+    <h3>Produits disponibles</h3>
+    <div id="listeProduits">
+      <div class="product">
+        <img src="https://via.placeholder.com/400x250" alt="Produit">
+        <h4>Polo Nike</h4>
+        <p><b>Prix: 25000 FC</b></p>
+        <p>Super polo original taille L</p>
+        <button class="btn whatsapp" onclick="contacterWhatsApp('Polo Nike - 25000 FC')">Contacter sur WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+function ajouterProduit(){
+  document.getElementById('formProduit').style.display = 'block';
+}
+function publierProduit(){
+  alert("Produit publié !");
+  document.getElementById('formProduit').style.display = 'none';
+}
+function voirPanier(){
+  alert("Votre panier est vide pour l'instant");
+}
+function contacterWhatsApp(produit){
+  // MET TON NUMERO ICI AVEC 243
+  let numero = "243853272232"; 
+  let message = "Bonjour je suis intéressé par : " + produit;
+  let url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(message);
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
