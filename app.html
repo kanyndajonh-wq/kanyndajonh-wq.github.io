@@ -50,7 +50,7 @@ function afficherProduits(){
       <h3>${p.nom}</h3>
       <p><b>Prix: ${p.prix} FC</b></p>
       <p>${p.desc}</p>
-      <button class="btn btn-green" onclick="whatsapp('${p.nom}')">Contacter sur WhatsApp</button>
+      <button class="btn btn-green" onclick='whatsapp(${JSON.stringify(p)})'>Contacter sur WhatsApp</button>
     </div>`;
   });
 }
@@ -62,6 +62,7 @@ function publierProduit(){
   let file = document.getElementById('image').files[0];
 
   if(nom=="" || prix==""){ alert("Nom et Prix obligatoires"); return;}
+  if(!file){ alert("Choisis une image"); return;}
 
   let reader = new FileReader();
   reader.onload = function(e){
@@ -72,11 +73,20 @@ function publierProduit(){
     document.getElementById('formulaire').style.display='none';
     alert("Produit publié !");
   }
-  if(file){ reader.readAsDataURL(file); } else { alert("Choisis une image"); }
+  reader.readAsDataURL(file);
 }
 
-function whatsapp(nom){
-  window.open(`https://wa.me/243853272232?text=Bonjour, je suis intéressé par ${nom} sur Marcher-Direct`);
+function whatsapp(produit){
+  let numero = "243853272232"; // <-- ICI MET TON VRAI NUMÉRO WHATSAPP SANS +
+  
+  let message = `Bonjour Marcher-Direct 👋\n\nJe suis intéressé par ce produit :\n\n`;
+  message += `*Nom :* ${produit.nom}\n`;
+  message += `*Prix :* ${produit.prix} FC\n`;
+  message += `*Description :* ${produit.desc}\n\n`;
+  message += `Merci !`;
+
+  let url = `https://wa.me/${numero}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
 }
 
 afficherProduits(); // charge les produits au démarrage
