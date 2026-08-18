@@ -21,13 +21,13 @@ body{font-family:Arial;background:#f5f5f5; padding-bottom:80px;}
 img{width:100%;height:220px; object-fit:cover; border-radius:15px;}
 h3{font-size:20px; margin:12px 0 5px 0;}
 .prix{font-size:18px; font-weight:bold; margin:5px 0 10px 0; color:#4A90E2;}
-.desc{font-size:14px; color:#555; margin-bottom:15px; height:40px; overflow:hidden;}
-.flex-btn{display:flex; justify-content:space-between;}
+.desc{font-size:14px; color:#555; margin-bottom:15px;}
+.flex-btn{display:flex; justify-content:space-between; gap:10px;}
 input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ccc; font-size:16px;}
 .bottom-nav{position:fixed; bottom:0; left:0; right:0; background:white; display:flex; justify-content:space-around; padding:8px 0; box-shadow:0 -2px 10px rgba(0,0,0,0.1); z-index:100;}
 .nav-item{text-align:center; color:#777; font-size:11px; cursor:pointer; width:25%;}
 .nav-item.active{ color:#4A90E2; font-weight:bold; }
-.nav-item.icon{ font-size:24px; display:block; margin-bottom:3px; }
+.nav-icon{ font-size:24px; display:block; margin-bottom:3px; }
 </style>
 </head>
 <body>
@@ -52,61 +52,76 @@ input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1
 
 <div class="bottom-nav">
   <div class="nav-item active">
-    <span class="icon">💬</span>
+    <span class="nav-icon">💬</span>
     Discussion
   </div>
   <div class="nav-item" onclick="ouvrirForm()">
-    <span class="icon">➕</span>
+    <span class="nav-icon">➕</span>
     Ajouter
   </div>
-  <div class="nav-item" onclick="alert('Panier bientôt')">
-    <span class="icon">🛒</span>
+  <div class="nav-item" onclick="alert('Le Panier arrive à la prochaine étape')">
+    <span class="nav-icon">🛒</span>
     Panier
   </div>
-  <div class="nav-item" onclick="alert('Profil bientôt')">
-    <span class="icon">👤</span>
+  <div class="nav-item" onclick="alert('Profil bientôt disponible')">
+    <span class="nav-icon">👤</span>
     Profil
   </div>
 </div>
 
 <script>
-let produits = JSON.parse(localStorage.getItem('marcherDirectProduits')) || [];
+let produits = [];
 let indexModif = -1;
 
-window.onload = afficher;
+// Charger les produits au démarrage
+try{
+  produits = JSON.parse(localStorage.getItem('marcherDirectProduits')) || [];
+} catch(e){
+  produits = [];
+}
 
-function ouvrirForm(){ document.getElementById('form').style.display='block'; window.scrollTo(0,0); }
+document.addEventListener('DOMContentLoaded', afficher);
+
+function ouvrirForm(){ 
+  document.getElementById('form').style.display='block'; 
+  window.scrollTo(0,0); 
+}
+
 function fermerForm(){
   document.getElementById('form').style.display='none';
   document.getElementById('titreForm').innerText = "Ajouter Produit";
   document.getElementById('btnSave').innerText = "ENREGISTRER";
-  document.getElementById('nom').value = ""; document.getElementById('prix').value = "";
-  document.getElementById('desc').value = ""; document.getElementById('img').value = "";
+  document.getElementById('nom').value = ""; 
+  document.getElementById('prix').value = "";
+  document.getElementById('desc').value = ""; 
+  document.getElementById('img').value = "";
   indexModif = -1;
 }
 
 function afficher(){
+  let liste = document.getElementById('liste');
   let html = "";
   if(produits.length == 0){
-    html = "<p style='text-align:center; width:100%;'>Aucun produit. Clique sur ➕ Ajouter en bas</p>";
+    html = "<p style='text-align:center; width:85vw;'>Aucun produit. Clique sur ➕ Ajouter en bas</p>";
+  } else {
+    for(let i=0; i<produits.length; i++){
+      let p = produits[i];
+      html += `
+      <div class="card">
+        <img src="${p.img}">
+        <h3>${p.nom}</h3>
+        <p class="prix">Prix: ${p.prix} FC</p>
+        <p class="desc">${p.desc}</p>
+        <button class="btn btn-green" onclick="whatsapp(${i})">📱 WhatsApp</button>
+        <button class="btn btn-purple" onclick="partager(${i})">📤 Partager</button>
+        <div class="flex-btn">
+          <button class="btn btn-orange" onclick="modifier(${i})">✏️ Modifier</button>
+          <button class="btn btn-red" onclick="supprimer(${i})">🗑️ Supprimer</button>
+        </div>
+      </div>`;
+    }
   }
-  for(let i=0; i<produits.length; i++){
-    let p = produits[i];
-    html += `
-    <div class="card">
-      <img src="${p.img}">
-      <h3>${p.nom}</h3>
-      <p class="prix">Prix: ${p.prix} FC</p>
-      <p class="desc">${p.desc}</p>
-      <button class="btn btn-green" onclick="whatsapp(${i})">📱 WhatsApp</button>
-      <button class="btn btn-purple" onclick="partager(${i})">📤 Partager</button>
-      <div class="flex-btn">
-        <button class="btn btn-orange" onclick="modifier(${i})">✏️ Modifier</button>
-        <button class="btn btn-red" onclick="supprimer(${i})">🗑️ Supprimer</button>
-      </div>
-    </div>`;
-  }
-  document.getElementById('liste').innerHTML = html;
+  liste.innerHTML = html;
 }
 
 function sauvegarder(){
@@ -146,18 +161,22 @@ function supprimer(i){
     produits.splice(i,1); 
     sauvegarder(); 
   }
-} // <-- ICI MANQUAIT CETTE ACCOLADE
+}
 
 function modifier(i){
-  indexModif = i; let p = produits[i]; ouvrirForm();
+  indexModif = i; 
+  let p = produits[i]; 
+  ouvrirForm();
   document.getElementById('titreForm').innerText = "Modifier Produit";
   document.getElementById('btnSave').innerText = "METTRE À JOUR";
-  document.getElementById('nom').value = p.nom; document.getElementById('prix').value = p.prix; document.getElementById('desc').value = p.desc;
+  document.getElementById('nom').value = p.nom; 
+  document.getElementById('prix').value = p.prix; 
+  document.getElementById('desc').value = p.desc;
 }
 
 function whatsapp(i){
   let p = produits[i];
-  let numero = "243853272232"; // <-- METS TON NUMÉRO ICI
+  let numero = "243853272232"; // <-- METS TON NUMÉRO ICI SANS +
   let message = `Bonjour! Je suis intéressé par:\n*${p.nom}* - ${p.prix} FC\n${p.desc}`;
   window.open(`https://wa.me/${numero}?text=${encodeURIComponent(message)}`, '_blank');
 }
