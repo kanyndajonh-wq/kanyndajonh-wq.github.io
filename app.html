@@ -10,7 +10,7 @@ body{font-family:Arial;background:#f5f5f5;margin:0}
 .container{padding:15px;max-width:600px;margin:auto}
 .btn{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:none;font-size:16px;font-weight:bold;cursor:pointer;}
 .btn-blue{background:#4A90E2;color:white;}
-.btn-green{background:#27ae60;color:white;}
+.btn-green{background:#25D366;color:white;} /* Couleur WhatsApp */
 .card{background:white;padding:15px;border-radius:15px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
 input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ddd;font-size:15px;box-sizing:border-box;}
 .prod-img{width:100%;height:200px;object-fit:cover;border-radius:10px;}
@@ -50,7 +50,7 @@ function afficherProduits(){
       <h3>${p.nom}</h3>
       <p><b>Prix: ${p.prix} FC</b></p>
       <p>${p.desc}</p>
-      <button class="btn btn-green" onclick='whatsapp(${JSON.stringify(p)})'>Contacter sur WhatsApp</button>
+      <button class="btn btn-green" onclick='whatsapp(${JSON.stringify(p)})'>📲 Contacter sur WhatsApp</button>
     </div>`;
   });
 }
@@ -76,14 +76,15 @@ function publierProduit(){
   reader.readAsDataURL(file);
 }
 
+// CODE FINAL WHATSAPP STYLE PUB
 function whatsapp(produit){
   let numero = "243853272232"; // <-- ICI MET TON VRAI NUMÉRO WHATSAPP SANS +
   
-  let message = `Bonjour Marcher-Direct 👋\n\nJe suis intéressé par ce produit :\n\n`;
-  message += `*Nom :* ${produit.nom}\n`;
-  message += `*Prix :* ${produit.prix} FC\n`;
-  message += `*Description :* ${produit.desc}\n\n`;
-  message += `Merci !`;
+  let message = `Bonjour ! 👋\n\nPuis-je en savoir plus à propos de ce produit ?\n\n`;
+  message += `*PRODUIT :* ${produit.nom}\n`;
+  message += `*PRIX :* ${produit.prix} FC\n`;
+  message += `*DESCRIPTION :* ${produit.desc}\n\n`;
+  message += `_Envoyé depuis Marcher-Direct_`;
 
   let url = `https://wa.me/${numero}?text=${encodeURIComponent(message)}`;
   window.open(url, '_blank');
