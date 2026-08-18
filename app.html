@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Marcher-Direct</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
+XXX>
 *{box-sizing:border-box;}
 body{font-family:Arial;background:#f5f5f5;margin:0}
 .header{background:linear-gradient(135deg, #4A90E2, #8E44AD);color:white;text-align:center;padding:15px;font-size:22px;font-weight:bold;}
@@ -12,16 +12,15 @@ body{font-family:Arial;background:#f5f5f5;margin:0}
 .btn{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:none;font-size:14px;font-weight:bold;cursor:pointer;}
 .btn-blue{background:#4A90E2;color:white;}
 .btn-green{background:#25D366;color:white;}
-.btn-orange{background:#FF9500;color:white;}
-.btn-red{background:#FF3B30;color:white;}
+.btn-orange{background:#FF9500;color:white;width:48%;}
+.btn-red{background:#FF3B30;color:white;width:48%;}
 .btn-purple{background:#833AB4;color:white;}
 .card{background:white;padding:15px;border-radius:15px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
 input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ddd;font-size:15px;}
-.prod-img{width:100%;height:250px;object-fit:cover;border-radius:10px;} /* Image plus grande en vertical */
+.prod-img{width:100%;height:250px;object-fit:cover;border-radius:10px;}
 .card h3{font-size:18px; margin:10px 0 5px 0;}
 .card p{font-size:15px; margin:5px 0;}
-.flex-btn{display:flex; gap:10px;}
-.flex-btn.btn{width:50%;}
+.flex-btn{display:flex; justify-content:space-between;}
 </style>
 </head>
 <body>
@@ -29,7 +28,7 @@ input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1
 <div class="container">
 
 <button class="btn btn-blue" onclick="ouvrirForm()">+ AJOUTER UN PRODUIT</button>
-<button class="btn btn-green" onclick="alert('Le panier arrive à la prochaine étape')">🛒 VOIR PANIER (0)</button>
+<button class="btn btn-green">🛒 VOIR PANIER (0)</button>
 
 <div class="card" id="formulaire" style="display:none;">
   <h3 id="formTitre">Nouveau Produit</h3>
@@ -42,13 +41,17 @@ input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1
 </div>
 
 <h2>Catalogue</h2>
-<div id="listeProduits"></div> <!-- PLUS DE GRID ICI = VERTICAL -->
+<div id="listeProduits"></div>
 
 </div>
 
 <script>
 let produits = JSON.parse(localStorage.getItem('produitsMD')) || [];
 let indexModif = null;
+
+window.onload = function(){
+  afficherProduits();
+}
 
 function afficherProduits(){
   let liste = document.getElementById('listeProduits');
@@ -57,7 +60,8 @@ function afficherProduits(){
     liste.innerHTML = "<p style='text-align:center;'>Aucun produit. Clique sur + AJOUTER</p>";
     return;
   }
-  produits.forEach((p, i) => {
+  for(let i = 0; i < produits.length; i++){
+    let p = produits[i];
     liste.innerHTML += `
     <div class="card">
       <img src="${p.image}" class="prod-img">
@@ -73,7 +77,7 @@ function afficherProduits(){
         <button class="btn btn-red" onclick='supprimerProduit(${i})'>🗑️ Supprimer</button>
       </div>
     </div>`;
-  });
+  }
 }
 
 function ouvrirForm(){ document.getElementById('formulaire').style.display='block'; }
@@ -87,38 +91,59 @@ function fermerForm(){
 }
 
 function publierProduit(){
-  let nom = document.getElementById('nom').value; let prix = document.getElementById('prix').value;
-  let desc = document.getElementById('desc').value; let file = document.getElementById('image').files[0];
+  let nom = document.getElementById('nom').value; 
+  let prix = document.getElementById('prix').value;
+  let desc = document.getElementById('desc').value; 
+  let file = document.getElementById('image').files[0];
   if(nom=="" || prix==""){ alert("Nom et Prix obligatoires"); return;}
 
   if(indexModif!= null){
     produits[indexModif].nom = nom; produits[indexModif].prix = prix; produits[indexModif].desc = desc;
-    if(file){ let reader = new FileReader(); reader.onload = function(e){ produits[indexModif].image = e.target.result; sauvegarder(); } reader.readAsDataURL(file);
-    } else { sauvegarder(); }
+    if(file){ 
+      let reader = new FileReader(); 
+      reader.onload = function(e){ 
+        produits[indexModif].image = e.target.result; 
+        sauvegarder(); 
+      } 
+      reader.readAsDataURL(file);
+    } else { 
+      sauvegarder(); 
+    }
   } else {
     if(!file){ alert("Choisis une image"); return;}
-    let reader = new FileReader(); reader.onload = function(e){
+    let reader = new FileReader(); 
+    reader.onload = function(e){
       let newProd = {nom:nom, prix:prix, desc:desc, image:e.target.result};
-      produits.push(newProd); sauvegarder();
-    } reader.readAsDataURL(file);
+      produits.push(newProd); 
+      sauvegarder();
+    } 
+    reader.readAsDataURL(file);
   }
 }
 
 function sauvegarder(){
   localStorage.setItem('produitsMD', JSON.stringify(produits));
-  afficherProduits(); fermerForm();
+  afficherProduits(); 
+  fermerForm();
   alert(indexModif!= null? "Produit modifié!" : "Produit publié!");
 }
 
 function supprimerProduit(index){
-  if(confirm("Supprimer ce produit?")){ produits.splice(index, 1); sauvegarder(); }
+  if(confirm("Supprimer ce produit?")){ 
+    produits.splice(index, 1); 
+    sauvegarder(); 
+  }
 }
 
 function modifierProduit(index){
-  indexModif = index; let p = produits[index]; ouvrirForm();
+  indexModif = index; 
+  let p = produits[index]; 
+  ouvrirForm();
   document.getElementById('formTitre').innerText = "Modifier Produit";
-  document.getElementById('nom').value = p.nom; document.getElementById('prix').value = p.prix;
-  document.getElementById('desc').value = p.desc; document.getElementById('btnPublier').innerText = "METTRE À JOUR";
+  document.getElementById('nom').value = p.nom; 
+  document.getElementById('prix').value = p.prix;
+  document.getElementById('desc').value = p.desc; 
+  document.getElementById('btnPublier').innerText = "METTRE À JOUR";
 }
 
 function envoyerWhatsApp(index){
@@ -130,13 +155,14 @@ function envoyerWhatsApp(index){
 
 function partagerProduit(index){
   let p = produits[index];
-  let texte = `🔥 ${p.nom} - ${p.prix} FC 🔥\n${p.desc}\n\nVoir sur Marcher-Direct`;
-  let choix = confirm("OK = Partager sur WhatsApp\nAnnuler = Copier le texte pour FB/IG");
-  if(choix){ window.open(`https://wa.me/?text=${encodeURIComponent(texte)}`, '_blank');
-  } else { navigator.clipboard.writeText(texte); alert("Texte copié!"); }
+  let texte = `🔥 ${p.nom} - ${p.prix} FC 🔥\n${p.desc}`;
+  if(navigator.share){
+    navigator.share({title: p.nom, text: texte});
+  } else {
+    navigator.clipboard.writeText(texte); 
+    alert("Texte copié! Colle-le sur WhatsApp/FB/IG");
+  }
 }
-
-afficherProduits();
 </script>
 </body>
 </html>
