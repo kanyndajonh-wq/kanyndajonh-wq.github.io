@@ -10,10 +10,13 @@ body{font-family:Arial;background:#f5f5f5;margin:0}
 .container{padding:15px;max-width:600px;margin:auto}
 .btn{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:none;font-size:16px;font-weight:bold;cursor:pointer;}
 .btn-blue{background:#4A90E2;color:white;}
-.btn-green{background:#25D366;color:white;} /* Couleur WhatsApp */
+.btn-green{background:#25D366;color:white;} 
+.btn-orange{background:orange;color:white;width:50%;}
+.btn-red{background:red;color:white;width:50%;}
 .card{background:white;padding:15px;border-radius:15px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
 input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ddd;font-size:15px;box-sizing:border-box;}
 .prod-img{width:100%;height:200px;object-fit:cover;border-radius:10px;}
+.flex-btn{display:flex; gap:10px;}
 </style>
 </head>
 <body>
@@ -24,12 +27,13 @@ input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1
 <button class="btn btn-green">🛒 VOIR PANIER (0)</button>
 
 <div class="card" id="formulaire" style="display:none;">
-  <h3>Nouveau Produit</h3>
+  <h3 id="formTitre">Nouveau Produit</h3>
   <input type="text" id="nom" placeholder="Nom du produit">
   <input type="number" id="prix" placeholder="Prix en FC">
   <textarea id="desc" placeholder="Description" rows="3"></textarea>
   <input type="file" id="image" accept="image/*">
-  <button class="btn btn-blue" onclick="publierProduit()">PUBLIER</button>
+  <button class="btn btn-blue" id="btnPublier" onclick="publierProduit()">PUBLIER</button>
+  <button class="btn" style="background:gray;color:white;" onclick="annulerForm()">ANNULER</button>
 </div>
 
 <h2>Produits disponibles</h2>
@@ -39,10 +43,14 @@ input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1
 
 <script>
 let produits = JSON.parse(localStorage.getItem('produits')) || [];
+let indexEnCours = null; // pour savoir si on modifie
 
 function afficherProduits(){
   let liste = document.getElementById('listeProduits');
   liste.innerHTML = "";
+  if(produits.length == 0){
+    liste.innerHTML = "<p style='text-align:center;'>Aucun produit. Clique sur + AJOUTER</p>";
+  }
   produits.forEach((p, i) => {
     liste.innerHTML += `
     <div class="card">
@@ -50,7 +58,13 @@ function afficherProduits(){
       <h3>${p.nom}</h3>
       <p><b>Prix: ${p.prix} FC</b></p>
       <p>${p.desc}</p>
+
       <button class="btn btn-green" onclick='whatsapp(${JSON.stringify(p)})'>📲 Contacter sur WhatsApp</button>
+
+      <div class="flex-btn">
+        <button class="btn btn-orange" onclick='modifierProduit(${i})'>✏️ Modifier</button>
+        <button class="btn btn-red" onclick='supprimerProduit(${i})'>🗑️ Supprimer</button>
+      </div>
     </div>`;
   });
 }
@@ -62,18 +76,79 @@ function publierProduit(){
   let file = document.getElementById('image').files[0];
 
   if(nom=="" || prix==""){ alert("Nom et Prix obligatoires"); return;}
-  if(!file){ alert("Choisis une image"); return;}
+  if(!file && indexEnCours == null){ alert("Choisis une image"); return;}
 
-  let reader = new FileReader();
-  reader.onload = function(e){
-    let newProd = {nom:nom, prix:prix, desc:desc, image:e.target.result};
-    produits.push(newProd);
+  if(indexEnCours != null){
+    mettreAJourProduit(indexEnCours, nom, prix, desc, file);
+  } else {
+    let reader = new FileReader();
+    reader.onload = function(e){
+      let newProd = {nom:nom, prix:prix, desc:desc, image:e.target.result};
+      produits.push(newProd);
+      localStorage.setItem('produits', JSON.stringify(produits));
+      afficherProduits();
+      annulerForm();
+      alert("Produit publié !");
+    }
+    reader.readAsDataURL(file);
+  }
+}
+
+function supprimerProduit(index){
+  if(confirm("Tu es sûr de vouloir supprimer ce produit?")){
+    produits.splice(index, 1);
     localStorage.setItem('produits', JSON.stringify(produits));
     afficherProduits();
-    document.getElementById('formulaire').style.display='none';
-    alert("Produit publié !");
+    alert("Produit supprimé!");
   }
-  reader.readAsDataURL(file);
+}
+
+function modifierProduit(index){
+  indexEnCours = index;
+  let p = produits[index];
+  document.getElementById('formulaire').style.display='block';
+  document.getElementById('formTitre').innerText = "Modifier Produit";
+
+  document.getElementById('nom').value = p.nom;
+  document.getElementById('prix').value = p.prix;
+  document.getElementById('desc').value = p.desc;
+
+  document.getElementById('btnPublier').innerText = "METTRE À JOUR";
+}
+
+function mettreAJourProduit(index, nom, prix, desc, file){
+  produits[index].nom = nom;
+  produits[index].prix = prix;
+  produits[index].desc = desc;
+
+  if(file){
+    let reader = new FileReader();
+    reader.onload = function(e){
+      produits[index].image = e.target.result;
+      finirMAJ();
+    }
+    reader.readAsDataURL(file);
+  } else {
+    finirMAJ();
+  }
+}
+
+function finirMAJ(){
+  localStorage.setItem('produits', JSON.stringify(produits));
+  afficherProduits();
+  annulerForm();
+  alert("Produit modifié!");
+}
+
+function annulerForm(){
+  document.getElementById('formulaire').style.display='none';
+  document.getElementById('formTitre').innerText = "Nouveau Produit";
+  document.getElementById('btnPublier').innerText = "PUBLIER";
+  document.getElementById('nom').value = "";
+  document.getElementById('prix').value = "";
+  document.getElementById('desc').value = "";
+  document.getElementById('image').value = "";
+  indexEnCours = null;
 }
 
 // CODE FINAL WHATSAPP STYLE PUB
