@@ -15,19 +15,20 @@ body{font-family:Arial;background:#f5f5f5; padding-bottom:80px;}
 .btn-orange{background:#FF9500;width:48%;}
 .btn-red{background:#FF3B30;width:48%;}
 .btn-purple{background:#833AB4;}
-.catalogue-scroll{display:flex; overflow-x:auto; scroll-snap-type: x mandatory; gap:15px; padding:10px 0;}
+.catalogue-scroll{display:flex; overflow-x:auto; scroll-snap-type: x mandatory; gap:12px; padding:10px 0;}
 .catalogue-scroll::-webkit-scrollbar{ display:none; }
-.card{background:white; border-radius:20px; padding:15px; min-width:85vw; scroll-snap-align: center; box-shadow:0 4px 15px rgba(0,0,0,0.1); flex-shrink:0;}
-img{width:100%;height:220px; object-fit:cover; border-radius:15px;}
-h3{font-size:20px; margin:12px 0 5px 0;}
-.prix{font-size:18px; font-weight:bold; margin:5px 0 10px 0; color:#4A90E2;}
-.desc{font-size:14px; color:#555; margin-bottom:15px;}
-.flex-btn{display:flex; justify-content:space-between; gap:10px;}
+.card{background:white; border-radius:20px; padding:12px; min-width:45vw; scroll-snap-align: center; box-shadow:0 4px 15px rgba(0,0,0,0.1); flex-shrink:0;}
+img{width:100%;height:160px; object-fit:cover; border-radius:15px;}
+h3{font-size:16px; margin:8px 0 4px 0;}
+.prix{font-size:15px; font-weight:bold; margin:4px 0 8px 0; color:#4A90E2;}
+.desc{font-size:12px; color:#555; margin-bottom:10px; height:35px; overflow:hidden;}
+.flex-btn{display:flex; justify-content:space-between; gap:6px;}
+.flex-btn.btn{padding:8px; font-size:12px;}
 input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ccc; font-size:16px;}
 .bottom-nav{position:fixed; bottom:0; left:0; right:0; background:white; display:flex; justify-content:space-around; padding:8px 0; box-shadow:0 -2px 10px rgba(0,0,0,0.1); z-index:100;}
 .nav-item{text-align:center; color:#777; font-size:11px; cursor:pointer; width:25%;}
 .nav-item.active{ color:#4A90E2; font-weight:bold; }
-.nav-icon{ font-size:24px; display:block; margin-bottom:3px; }
+.nav-icon{ font-size:22px; display:block; margin-bottom:2px; }
 </style>
 </head>
 <body>
@@ -45,7 +46,7 @@ input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1
 <button class="btn" style="background:gray;" onclick="fermerForm()">FERMER</button>
 </div>
 
-<h2 style="margin:10px 0;">Catalogue - Glisse →</h2>
+<h2 style="margin:10px 0; font-size:18px;">Catalogue - Glisse →</h2>
 <div id="liste" class="catalogue-scroll"></div>
 
 </div>
@@ -73,12 +74,9 @@ input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1
 let produits = [];
 let indexModif = -1;
 
-// Charger les produits au démarrage
 try{
   produits = JSON.parse(localStorage.getItem('marcherDirectProduits')) || [];
-} catch(e){
-  produits = [];
-}
+} catch(e){ produits = []; }
 
 document.addEventListener('DOMContentLoaded', afficher);
 
@@ -102,7 +100,7 @@ function afficher(){
   let liste = document.getElementById('liste');
   let html = "";
   if(produits.length == 0){
-    html = "<p style='text-align:center; width:85vw;'>Aucun produit. Clique sur ➕ Ajouter en bas</p>";
+    html = "<p style='text-align:center; width:100%;'>Aucun produit. Clique sur ➕ Ajouter</p>";
   } else {
     for(let i=0; i<produits.length; i++){
       let p = produits[i];
@@ -110,13 +108,13 @@ function afficher(){
       <div class="card">
         <img src="${p.img}">
         <h3>${p.nom}</h3>
-        <p class="prix">Prix: ${p.prix} FC</p>
+        <p class="prix">${p.prix} FC</p>
         <p class="desc">${p.desc}</p>
         <button class="btn btn-green" onclick="whatsapp(${i})">📱 WhatsApp</button>
         <button class="btn btn-purple" onclick="partager(${i})">📤 Partager</button>
         <div class="flex-btn">
-          <button class="btn btn-orange" onclick="modifier(${i})">✏️ Modifier</button>
-          <button class="btn btn-red" onclick="supprimer(${i})">🗑️ Supprimer</button>
+          <button class="btn btn-orange" onclick="modifier(${i})">✏️</button>
+          <button class="btn btn-red" onclick="supprimer(${i})">🗑️</button>
         </div>
       </div>`;
     }
@@ -142,15 +140,14 @@ function ajouter(){
     produits[indexModif].nom = nom; produits[indexModif].prix = prix; produits[indexModif].desc = desc;
     if(file){
       let reader = new FileReader();
-      reader.onload = function(e){ produits[indexModif].img = e.target.result; sauvegarder(); alert("Produit modifié!"); }
-      reader.readAsDataURL(file);
-    } else { sauvegarder(); alert("Produit modifié!"); }
+      reader.onload = function(e){ produits[indexModif].img = e.target.result; sauvegarder(); }
+    } else { sauvegarder(); }
   } else {
     if(!file){alert("Choisis une image"); return;}
     let reader = new FileReader();
     reader.onload = function(e){
       produits.push({nom:nom, prix:prix, desc:desc, img:e.target.result});
-      sauvegarder(); alert("Produit ajouté!");
+      sauvegarder();
     }
     reader.readAsDataURL(file);
   }
@@ -176,7 +173,7 @@ function modifier(i){
 
 function whatsapp(i){
   let p = produits[i];
-  let numero = "243853272232"; // <-- METS TON NUMÉRO ICI SANS +
+  let numero = "243853272232"; 
   let message = `Bonjour! Je suis intéressé par:\n*${p.nom}* - ${p.prix} FC\n${p.desc}`;
   window.open(`https://wa.me/${numero}?text=${encodeURIComponent(message)}`, '_blank');
 }
