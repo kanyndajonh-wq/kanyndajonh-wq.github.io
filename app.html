@@ -6,9 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 *{box-sizing:border-box; margin:0; padding:0;}
-body{font-family:Arial;background:#f5f5f5;}
+body{font-family:Arial;background:#f5f5f5; padding-bottom:80px;} /* Espace pour la barre du bas */
 .header{background:linear-gradient(135deg, #4A90E2, #8E44AD);color:white;text-align:center;padding:15px;font-size:22px;font-weight:bold; position:sticky; top:0; z-index:10;}
 .container{padding:15px;}
+
 .btn{width:100%;padding:14px;margin:8px 0;border-radius:12px;border:none;font-size:16px;font-weight:bold;cursor:pointer;color:white;}
 .btn-blue{background:#4A90E2;}
 .btn-green{background:#25D366;}
@@ -16,7 +17,7 @@ body{font-family:Arial;background:#f5f5f5;}
 .btn-red{background:#FF3B30;width:48%;}
 .btn-purple{background:#833AB4;}
 
-/* LE TRUC POUR SCROLL HORIZONTAL */
+/* SCROLL HORIZONTAL */
 .catalogue-scroll{
   display:flex;
   overflow-x:auto;
@@ -24,32 +25,52 @@ body{font-family:Arial;background:#f5f5f5;}
   gap:15px;
   padding:10px 0;
 }
-.catalogue-scroll::-webkit-scrollbar{ display:none; } /* Cache la barre */
+.catalogue-scroll::-webkit-scrollbar{ display:none; }
 
 .card{
   background:white;
   border-radius:20px;
   padding:15px;
-  min-width:90vw; /* Chaque carte prend 90% de l'écran */
+  min-width:85vw; /* 85% de l'écran au lieu de 90 */
   scroll-snap-align: center;
   box-shadow:0 4px 15px rgba(0,0,0,0.1);
   flex-shrink:0;
 }
-img{width:100%;height:300px; object-fit:cover; border-radius:15px;}
-h3{font-size:22px; margin:12px 0 5px 0;}
-.prix{font-size:20px; font-weight:bold; margin:5px 0 10px 0;}
-.desc{font-size:15px; color:#555; margin-bottom:15px;}
+img{width:100%;height:220px; object-fit:cover; border-radius:15px;} /* IMAGE REDUITE : 220px au lieu de 300 */
+h3{font-size:20px; margin:12px 0 5px 0;}
+.prix{font-size:18px; font-weight:bold; margin:5px 0 10px 0; color:#4A90E2;}
+.desc{font-size:14px; color:#555; margin-bottom:15px; height:40px; overflow:hidden;}
 .flex-btn{display:flex; justify-content:space-between;}
 input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ccc; font-size:16px;}
+
+/* BARRE DU BAS STYLE WHATSAPP */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  padding:8px 0;
+  box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+  z-index:100;
+}
+.nav-item{
+  text-align:center;
+  color:#777;
+  font-size:11px;
+  cursor:pointer;
+  width:25%;
+}
+.nav-item.active{ color:#4A90E2; font-weight:bold; }
+.nav-item.icon{ font-size:24px; display:block; margin-bottom:3px; }
 </style>
 </head>
 <body>
 
 <div class="header">Marcher-Direct</div>
 <div class="container">
-
-<button class="btn btn-blue" onclick="ouvrirForm()">+ AJOUTER UN PRODUIT</button>
-<button class="btn btn-green">🛒 VOIR PANIER (0)</button>
 
 <div class="card" id="form" style="display:none;">
 <h3 id="titreForm">Ajouter Produit</h3>
@@ -66,13 +87,33 @@ input, textarea{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1
 
 </div>
 
+<!-- BARRE DU BAS -->
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="alert('Tu es déjà sur Discussion')">
+    <span class="icon">💬</span>
+    Discussion
+  </div>
+  <div class="nav-item" onclick="ouvrirForm()">
+    <span class="icon">➕</span>
+    Ajouter
+  </div>
+  <div class="nav-item" onclick="alert('Le Panier arrive à la prochaine étape')">
+    <span class="icon">🛒</span>
+    Panier
+  </div>
+  <div class="nav-item" onclick="alert('Profil bientôt disponible')">
+    <span class="icon">👤</span>
+    Profil
+  </div>
+</div>
+
 <script>
 let produits = JSON.parse(localStorage.getItem('marcherDirectProduits')) || [];
 let indexModif = -1;
 
 window.onload = afficher;
 
-function ouvrirForm(){ document.getElementById('form').style.display='block'; }
+function ouvrirForm(){ document.getElementById('form').style.display='block'; window.scrollTo(0,0); }
 function fermerForm(){
   document.getElementById('form').style.display='none';
   document.getElementById('titreForm').innerText = "Ajouter Produit";
@@ -85,7 +126,7 @@ function fermerForm(){
 function afficher(){
   let html = "";
   if(produits.length == 0){
-    html = "<p style='text-align:center; width:100%;'>Aucun produit. Clique sur + AJOUTER</p>";
+    html = "<p style='text-align:center; width:100%;'>Aucun produit. Clique sur ➕ Ajouter en bas</p>";
   }
   for(let i=0; i<produits.length; i++){
     let p = produits[i];
@@ -138,7 +179,7 @@ function ajouter(){
   }
 }
 
-function supprimer(i){ if(confirm("Supprimer ce produit?")){ produits.splice(i,1); sauvegarder(); } }
+function supprimer(i){ if(confirm("Supprimer ce produit?")){ produits.splice(i,1); sauvegarder(); }
 function modifier(i){
   indexModif = i; let p = produits[i]; ouvrirForm();
   document.getElementById('titreForm').innerText = "Modifier Produit";
